@@ -33,9 +33,9 @@ class VFELayer(object):
         # [K, T, 2 * units]
         concatenated = tf.concat([pointwise, repeated], axis=2)
 
-        mask = tf.tile(mask, [1, 1, 2 * self.units])
+        ###mask = tf.tile(mask, [1, 1, 2 * self.units])
 
-        concatenated = tf.multiply(concatenated, tf.cast(mask, tf.float32))
+        ###concatenated = tf.multiply(concatenated, tf.cast(mask, tf.float32))
 
         return concatenated
 

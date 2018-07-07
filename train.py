@@ -17,25 +17,15 @@ from utils.kitti_loader import iterate_data, sample_test_data
 from train_hook import check_if_should_pause
 
 
-
-
 parser = argparse.ArgumentParser(description='training')
-parser.add_argument('-i', '--max-epoch', type=int, nargs='?', default=160,
-                    help='max epoch')
-parser.add_argument('-n', '--tag', type=str, nargs='?', default='default',
-                    help='set log tag')
-parser.add_argument('-b', '--single-batch-size', type=int, nargs='?', default=2,
-                    help='set batch size')
-parser.add_argument('-l', '--lr', type=float, nargs='?', default=0.001,
-                    help='set learning rate')
-parser.add_argument('-al', '--alpha', type=float, nargs='?', default=1.0,
-                    help='set alpha in los function')
-parser.add_argument('-be', '--beta', type=float, nargs='?', default=10.0,
-                    help='set beta in los function')
-parser.add_argument('--output-path', type=str, nargs='?',
-                    default='./predictions', help='results output dir')
-parser.add_argument('-v', '--vis', type=bool, nargs='?', default=False,
-                    help='set the flag to True if dumping visualizations')
+parser.add_argument('-i', '--max-epoch', type=int, nargs='?', default=160, help='max epoch')
+parser.add_argument('-n', '--tag', type=str, nargs='?', default='default', help='set log tag')
+parser.add_argument('-b', '--single-batch-size', type=int, nargs='?', default=2, help='set batch size')
+parser.add_argument('-l', '--lr', type=float, nargs='?', default=0.001, help='set learning rate')
+parser.add_argument('-al', '--alpha', type=float, nargs='?', default=1.0, help='set alpha in los function')
+parser.add_argument('-be', '--beta', type=float, nargs='?', default=10.0, help='set beta in los function')
+parser.add_argument('--output-path', type=str, nargs='?', default='./predictions', help='results output dir')
+parser.add_argument('-v', '--vis', type=bool, nargs='?', default=False, help='set the flag to True if dumping visualizations')
 args = parser.parse_args()
 
 
@@ -73,7 +63,7 @@ def main(_):
                 max_gradient_norm=5.0,
                 alpha=args.alpha,
                 beta=args.beta,
-                avail_gpus=cfg.GPU_AVAILABLE.split(',')
+                avail_gpus= cfg.GPU_AVAILABLE#.split(',')
             )
             # param init/restore
             if tf.train.get_checkpoint_state(save_model_dir):
@@ -99,22 +89,24 @@ def main(_):
                 counter = 0
                 batch_time = time.time()
                 for batch in iterate_data(train_dir, shuffle=True, aug=True, is_testset=False, batch_size=args.single_batch_size * cfg.GPU_USE_COUNT, multi_gpu_sum=cfg.GPU_USE_COUNT):
-                    
+
                     counter += 1
                     global_counter += 1
-                    
+
                     if counter % summary_interval == 0:
                         is_summary = True
                     else:
                         is_summary = False
-                    
+
                     start_time = time.time()
                     ret = model.train_step( sess, batch, train=True, summary = is_summary )
                     forward_time = time.time() - start_time
                     batch_time = time.time() - batch_time
 
                     
-                    print('train: {} @ epoch:{}/{} loss: {:.4f} reg_loss: {:.4f} cls_loss: {:.4f} cls_pos_loss: {:.4f} cls_neg_loss: {:.4f} forward time: {:.4f} batch time: {:.4f}'.format(counter,epoch, args.max_epoch, ret[0], ret[1], ret[2], ret[3], ret[4], forward_time, batch_time))
+                    print('train: {} @ epoch:{}/{} loss: {:.4f} reg_loss: {:.4f} cls_loss: {:.4f} cls_pos_loss: {:.4f} cls_neg_loss: {:.4f} forward time: {:.4f} batch time: {:.4f}'\
+                            .format(counter,epoch, args.max_epoch, ret[0], ret[1], ret[2], ret[3], ret[4], forward_time, batch_time))
+
                     with open('log/train.txt', 'a') as f:
                         f.write( 'train: {} @ epoch:{}/{} loss: {:.4f} reg_loss: {:.4f} cls_loss: {:.4f} cls_pos_loss: {:.4f} cls_neg_loss: {:.4f} forward time: {:.4f} batch time: {:.4f} \n'.format(counter, epoch, args.max_epoch, ret[0], ret[1], ret[2], ret[3], ret[4], forward_time, batch_time) )
                     
@@ -185,8 +177,6 @@ def main(_):
                     cmd_2 = os.path.join( args.output_path, str(epoch) )
                     cmd_3 = os.path.join( args.output_path, str(epoch), 'log' )
                     os.system( " ".join( [cmd_1, cmd_2, cmd_3] ) )
-                        
-                        
 
             print('train done. total epoch:{} iter:{}'.format(
                 epoch, model.global_step.eval()))

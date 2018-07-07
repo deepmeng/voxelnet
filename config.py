@@ -18,13 +18,14 @@ __C = edict()
 cfg = __C
 
 # for dataset dir
-__C.DATA_DIR = '/media/hdc/KITTI/for_voxelnet/cropped_dataset'
-__C.CALIB_DIR = '/media/hdc/KITTI/calib/data_object_calib/training/calib'
+__C.DATA_DIR = '/home1/liumeng/object_detect/voxelnet/data/object/'
+__C.CALIB_DIR = '/home1/liumeng/object_detect/voxelnet/data/object/training/calib/'
 
 
 # for gpu allocation
-__C.GPU_AVAILABLE = '0,1'
-__C.GPU_USE_COUNT = len(__C.GPU_AVAILABLE.split(','))
+#__C.GPU_AVAILABLE = '0,1'
+__C.GPU_AVAILABLE = '0'
+__C.GPU_USE_COUNT = 1#len(__C.GPU_AVAILABLE.split(','))
 __C.GPU_MEMORY_FRACTION = 1
 
 # selected object

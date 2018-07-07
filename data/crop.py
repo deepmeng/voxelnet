@@ -1,3 +1,4 @@
+import os
 import numpy as np
 from scipy.misc import imread
 
@@ -79,9 +80,9 @@ def align_img_and_pc(img_dir, pc_dir, calib_dir):
     return points
 
 # update the following directories
-IMG_ROOT = '/media/hdc/KITTI/image/training/image_2/'
-PC_ROOT = '/media/hdc/KITTI/point_cloud/raw_bin_files/training/velodyne/'
-CALIB_ROOT = '/media/hdc/KITTI/calib/data_object_calib/training/calib/'
+IMG_ROOT = '/home1/liumeng/object_detect/voxelnet/data/object/training/image_2/'
+PC_ROOT = '/home1/liumeng/object_detect/voxelnet/data/object/training/velodyne/'
+CALIB_ROOT = '/home1/liumeng/object_detect/voxelnet/data/object/training/calib/'
 
 
 
@@ -90,9 +91,12 @@ for frame in range(0, 7481):
     pc_dir = PC_ROOT + '%06d.bin' % frame
     calib_dir = CALIB_ROOT + '%06d.txt' % frame
 
+    if not os.path.exists(pc_dir):
+        continue
+
     points = align_img_and_pc(img_dir, pc_dir, calib_dir)
-    
-    output_name = PC_ROOT + frame + '.bin'
+
+    output_name = PC_ROOT + str(frame) + '.bin'
     points[:,:4].astype('float32').tofile(output_name)
 
 

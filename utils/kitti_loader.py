@@ -54,8 +54,11 @@ def iterate_data(data_dir, shuffle=False, aug=False, is_testset=False, batch_siz
     
     data_tag = [name.split('/')[-1].split('.')[-2] for name in f_rgb]
 
+    print("data_tag:", data_tag)
+    print("len(data_tag)", len(data_tag), " |f_rgb:", len(f_rgb), " |f_lidar:", len(f_lidar))
+
     assert len(data_tag) != 0, "dataset folder is not correct"
-    assert len(data_tag) == len(f_rgb) == len(f_lidar) , "dataset folder is not correct"
+    ####assert len(data_tag) == len(f_rgb) == len(f_lidar) , "dataset folder is not correct"
     
     nums = len(f_rgb)
     indices = list(range(nums))
