@@ -58,8 +58,8 @@ def iterate_data(data_dir, shuffle=False, aug=False, is_testset=False, batch_siz
     print("len(data_tag)", len(data_tag), " |f_rgb:", len(f_rgb), " |f_lidar:", len(f_lidar))
 
     assert len(data_tag) != 0, "dataset folder is not correct"
-    ####assert len(data_tag) == len(f_rgb) == len(f_lidar) , "dataset folder is not correct"
-    
+    assert len(data_tag) == len(f_rgb) == len(f_lidar) , "dataset folder is not correct"
+
     nums = len(f_rgb)
     indices = list(range(nums))
     if shuffle:
@@ -73,7 +73,7 @@ def iterate_data(data_dir, shuffle=False, aug=False, is_testset=False, batch_siz
         start_idx = batch_idx * batch_size
         excerpt = indices[start_idx:start_idx + batch_size]
         
-        rets=TRAIN_POOL.map(proc,excerpt)
+        rets=TRAIN_POOL.map(proc, excerpt)
 
         tag = [ ret[0] for ret in rets ]
         rgb = [ ret[1] for ret in rets ]
@@ -113,6 +113,7 @@ def sample_test_data(data_dir, batch_size=1, multi_gpu_sum=1):
     f_label.sort()
     
     data_tag = [name.split('/')[-1].split('.')[-2] for name in f_rgb]
+    ####print("data_tag:", len(data_tag), " f_lidar:", len(f_lidar), " f_rgb:", len(f_rgb))
     
     assert(len(data_tag) == len(f_rgb) == len(f_lidar)), "dataset folder is not correct"
     

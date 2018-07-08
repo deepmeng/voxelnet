@@ -10,7 +10,7 @@ val_dest_dir = "./object/validation/velodyne-choose/"
 srcfile = ""
 destfile = ""
 
-def move_train_files():
+def move_train_files_velodyne():
     train_txt = "./object/train.txt"
 
     train_fd = open(train_txt, "r")
@@ -22,7 +22,7 @@ def move_train_files():
 
         shutil.move(srcfile, destfile)
 
-def move_val_files():
+def move_val_files_velodyne():
     val_txt = "./object/val.txt"
     val_fd = open(val_txt, "r")
     val_lines = val_fd.readlines()
@@ -33,7 +33,41 @@ def move_val_files():
 
         shutil.move(srcfile, destfile)
 
+def move_train_files_images():
+    train_txt = "./object/train.txt"
+    src_dir = "./object/training/image_2/"
+    dest_dir = "./object/training/image_2-choose/"
+
+    train_fd = open(train_txt, "r")
+    train_lines = train_fd.readlines()
+    for line in train_lines:
+        line = line.strip("\n")
+        srcfile  = src_dir  + line + ".png"
+        destfile = dest_dir + line + ".png"
+
+        shutil.move(srcfile, destfile)
+
+def move_val_files_images():
+    val_txt = "./object/val.txt"
+    src_dir = "./object/validation/image_2/"
+    dest_dir = "./object/validation/image_2-choose/"
+
+    val_fd = open(val_txt, "r")
+    val_lines = val_fd.readlines()
+    for line in val_lines:
+        line = line.strip("\n")
+        srcfile  = src_dir  + line + ".png"
+        destfile = dest_dir + line + ".png"
+        print("srcfile:",srcfile)
+
+        shutil.move(srcfile, destfile)
+
+
+
+
 if __name__=="__main__":
-    move_train_files()
-    move_val_files()
+    #move_train_files()
+    move_val_files_velodyne()
+    #move_train_files_images()
+    #move_val_files_images()
 
